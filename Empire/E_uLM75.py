@@ -23,14 +23,14 @@ class E_uLM75(object):
         return output[0], output[1]
 
     def _get_temp(self):
-        """Return a tuple of (temp_c, point)."""
+        """Return a int, the temp in Celsius x 10"""
         try:
             temp = self._get_output()
             self._last_results = (int(temp[0]), floor(int(temp[1]) / 23))
-            return self._last_results[0]*10+self._last_results[1]
+            return int(self._last_results[0]*10+self._last_results[1])
         except(E):
             self._error = E
-            return 0.0
+            return 0
         
     def _updateTemp(self,caller):
         if len(self._tempValues) < 7:
