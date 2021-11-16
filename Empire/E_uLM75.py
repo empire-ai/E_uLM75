@@ -7,14 +7,15 @@ class E_uLM75(object):
     _error = "None"
     _last_results = (0,0)
     _last_read = 0
-    _currentTemp = 0
-    _tempValues = []
+    _current_temp = 0
+    _temp_values = []
 
     def __init__(self, i2cInput, address=0x4f):
         self.i2c = i2cInput
         self._address = address
         
         self._tempTimer = machine.Timer(2)
+        #Update the value 1Hz, once 6 reading are preformed the geomtric midlle is returnes as curren_temp
         self._tempTimer.init(period=1000, mode=machine.Timer.PERIODIC, callback=self._updateTemp) 
 
     def _get_output(self):
@@ -33,13 +34,13 @@ class E_uLM75(object):
             return 0
         
     def _updateTemp(self,caller):
-        if len(self._tempValues) < 7:
-            self._tempValues.append(self._get_temp())
+        if len(self._temp_values) < 7:
+            self._temp_values.append(self._get_temp())
         else:
-            self._currentTemp = self._tempValues[3]
-            self._tempValues = []
+            self._current_temp = self._temp_values[3]
+            self._temp_values = []
             
     def read(self):
-        return self._currentTemp
+        return self._current_temp
             
         
